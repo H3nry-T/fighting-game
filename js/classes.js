@@ -101,19 +101,21 @@ class Fighter extends Sprite {
         this.color = color; 
         this.isAttacking;
         this.health = 100; 
+        this.dead = false; 
 
         this.sprites = sprites; 
         for (const sprite in this.sprites) {
             sprites[sprite].image = new Image(); 
             sprites[sprite].image.src = sprites[sprite].imageSource; 
         }
-        console.log(this.sprites); 
     }
 
     //update sprite affected by gravity
     update() {
         this.draw(); 
-        this.animateFrames(); 
+        if (!this.dead) {
+            this.animateFrames(); 
+        }
 
         //attackBox should follow around the player's position       offset means attack box on enemy will face the player
         this.attackBox.position.x = this.position.x + this.attackBox.offset.x;
@@ -141,16 +143,26 @@ class Fighter extends Sprite {
     }
 
     takeHit(attackDamage) {
-        this.switchSprite("takeHit"); 
         this.health -= attackDamage; 
+        if (this.health <= 0) {
+            this.switchSprite("death"); 
+        } else {
+            this.switchSprite("takeHit"); 
+        }
     }
 
     switchSprite(sprite) {
+        if (this.image === this.sprites.death.image) {
+            if (this.framesCurrent === this.sprites.death.framesMax - 1) {
+                this.dead = true; 
+            }
+            return //death results in no code being run
+        }
         if (this.image === this.sprites.attack1.image && this.framesCurrent < this.sprites.attack1.framesMax - 1) {
             return //idle animation will not trigger whilst attacking 
         } else if (this.image === this.sprites.takeHit.image && this.framesCurrent < this.sprites.takeHit.framesMax - 1) {
             return //idle animation will not trigger whilst taking hit
-        }
+        } 
         switch(sprite) {
             case "idle":
                 if (this.image !== this.sprites.idle.image) {
@@ -191,6 +203,13 @@ class Fighter extends Sprite {
                 if (this.image !== this.sprites.takeHit.image) {
                     this.image = this.sprites.takeHit.image; 
                     this.framesMax = this.sprites.takeHit.framesMax; 
+                    this.framesCurrent = 0;
+                }
+                break;
+            case "death":
+                if (this.image !== this.sprites.death.image) {
+                    this.image = this.sprites.death.image; 
+                    this.framesMax = this.sprites.death.framesMax; 
                     this.framesCurrent = 0;
                 }
                 break;
