@@ -19,6 +19,15 @@ const background = new Sprite({
     imageSource: "./assets/img/background.png"
 })
 
+const shop = new Sprite({
+    position: {
+        x: 600, 
+        y: 130,
+    },
+    imageSource: "./assets/img/shop.png", 
+    scale: 2.75,
+    framesMax: 6
+})
 
 //create instance of PLAYER Sprite
 const player = new Fighter({
@@ -33,7 +42,10 @@ const player = new Fighter({
     offset: {
         x: 0, 
         y: 0
-    }
+    }, 
+    imageSource: "./assets/img/samuraiMack/Idle.png", 
+    framesMax: 8, 
+    scale: 2.5
 }); 
 
 player.draw(); 
@@ -95,8 +107,12 @@ function animate() {
     //redraw the fighting background as a black rectangle
     c.fillStyle = "black"; 
     c.fillRect(0, 0, canvas.width, canvas.height); 
+
     //draw in background sprite; 
     background.update(); 
+    
+    //draw shop
+    shop.update();
 
     //update player's position affected by gravity; 
     player.update(); 
@@ -154,8 +170,8 @@ function animate() {
 
 animate(); 
 
-//CONTROLS
 
+//CONTROLS ===============================================>
 //prevent scrolling and browser keybinds
 window.addEventListener("keydown", function(e) {
     if(["Space","ArrowUp","ArrowDown","ArrowLeft","ArrowRight"].indexOf(e.code) > -1) {
