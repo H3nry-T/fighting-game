@@ -4,83 +4,24 @@ const c = canvas.getContext("2d"); //c stands for context it will be used alot
 canvas.width = 1024; 
 canvas.height = 576; 
 
-//draw a rectangle from top left coordinate "fighting background"
+//draw a rectangle canvas from top left coordinate "fighting background"
 c.fillRect(0, 0, canvas.width, canvas.height);
 
 //global constants 
 const gravity = 0.98; 
 
+//create new instance of background Sprite(); 
+const background = new Sprite({
+    position: {
+        x: 0, 
+        y: 0,
+    },
+    imageSource: "./assets/img/background.png"
+})
 
-//class for fighters
-class Sprite {
-    constructor({position, velocity, color="red", offset}) {
-        this.position = position;
-        this.velocity = velocity;
-        this.height = 150; 
-        this.width = 50; 
-        
-        this.lastKey; 
-        
-        this.attackBox = {
-            position: {
-                //pass by value NOT a shallow clone
-                x: this.position.x, //0
-                y: this.position.y  //0
-            },
-            width: 100,
-            height: 50,
-            
-            offset: offset
-        }
-        
-        this.color = color; 
-        this.isAttacking;
-        this.health = 100; 
-    }
-
-    //draw sprite
-    draw() {
-        c.fillStyle = this.color; 
-        c.fillRect(this.position.x, this.position.y, this.width, this.height); //50px wide and 150px tall
-
-        //draw attackBox when attacking
-        if (this.isAttacking) {
-            c.fillStyle = "green"; 
-            c.fillRect(this.attackBox.position.x, this.attackBox.position.y, this.attackBox.width, this.attackBox.height); 
-        }
-    }
-
-    //update sprite
-    update() {
-        this.draw(); 
-
-        //attackBox should follow around the player's position       offset means attack box on enemy will face the player
-        this.attackBox.position.x = this.position.x + this.attackBox.offset.x;
-        this.attackBox.position.y = this.position.y;  
-
-        //update position depends on button press / gravity
-        this.position.x += this.velocity.x; 
-        this.position.y += this.velocity.y; 
-
-        //  bottom of the sprite      +       velocity    >=      floor    we don't want the position to crash through the floor
-        if (this.position.y + this.height + this.velocity.y >= canvas.height) {
-            this.velocity.y = 0; 
-        } else {
-            // update gravitational acceleration if in sprite in air
-            this.velocity.y += gravity; 
-        }
-    }
-
-    attack() {
-        this.isAttacking = true; 
-        setTimeout(() => {
-            this.isAttacking = false; 
-        }, 100);
-    }
-}
 
 //create instance of PLAYER Sprite
-const player = new Sprite({
+const player = new Fighter({
     position: {
         x: 0, 
         y: 0
@@ -98,7 +39,7 @@ const player = new Sprite({
 player.draw(); 
 
 //create instance of ENEMY sprite
-const enemy = new Sprite({
+const enemy = new Fighter({
     position: {
         x: 400, 
         y: 100
@@ -144,42 +85,7 @@ const keys = {
     }
 }
 
-//rectangularCollision conditional 
-function rectangularCollison({ rectangle1, rectangle2 }) {
-    return (
-        rectangle1.attackBox.position.x + rectangle1.attackBox.width >= rectangle2.position.x
-        && rectangle1.attackBox.position.x <= rectangle2.position.x + rectangle2.width
-        && rectangle1.attackBox.position.y + rectangle1.attackBox.height >= rectangle2.position.y
-        && rectangle1.attackBox.position.y <= rectangle2.position.y + rectangle2.height
-    );
-}
-
-//determine winner takes in object with 2 sprites 
-function determineWinner({player, enemy, timerId}) {
-    clearTimeout(timerId); 
-    document.querySelector("#display-text").style.display = "flex"; 
-    if (player.health === enemy.health) {
-        document.querySelector("#display-text").innerHTML = "Tie"; 
-    } else if (player.health > enemy.health) {
-        document.querySelector("#display-text").innerHTML = "PLAYER WINS";
-    } else if (player.health < enemy.health) {
-        document.querySelector("#display-text").innerHTML = "ENEMY WINS";
-    }
-}
-//decrease timer countdown
-let timer = 60; 
-let timerId;  
-function decreaseTimer() {
-    if (timer > 0) {
-        timerId = setTimeout(decreaseTimer, 1000);
-        timer--; 
-        document.querySelector("#timer").innerHTML = timer; 
-    }
-
-    if (timer === 0) {        
-        determineWinner({player, enemy, timerId});
-    }
-}
+//start the 60 second timer 
 decreaseTimer(); 
 
 // animate the game
@@ -189,6 +95,8 @@ function animate() {
     //redraw the fighting background as a black rectangle
     c.fillStyle = "black"; 
     c.fillRect(0, 0, canvas.width, canvas.height); 
+    //draw in background sprite; 
+    background.update(); 
 
     //update player's position affected by gravity; 
     player.update(); 
