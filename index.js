@@ -16,12 +16,11 @@ class Sprite {
     constructor({position, velocity, color="red", offset}) {
         this.position = position;
         this.velocity = velocity;
-        this.color = color; 
         this.height = 150; 
         this.width = 50; 
-
+        
         this.lastKey; 
-
+        
         this.attackBox = {
             position: {
                 //pass by value NOT a shallow clone
@@ -30,11 +29,13 @@ class Sprite {
             },
             width: 100,
             height: 50,
-
+            
             offset: offset
         }
-
-        this.isAttacking
+        
+        this.color = color; 
+        this.isAttacking;
+        this.health = 100; 
     }
 
     //draw sprite
@@ -153,6 +154,34 @@ function rectangularCollison({ rectangle1, rectangle2 }) {
     );
 }
 
+//determine winner takes in object with 2 sprites 
+function determineWinner({player, enemy, timerId}) {
+    clearTimeout(timerId); 
+    document.querySelector("#display-text").style.display = "flex"; 
+    if (player.health === enemy.health) {
+        document.querySelector("#display-text").innerHTML = "Tie"; 
+    } else if (player.health > enemy.health) {
+        document.querySelector("#display-text").innerHTML = "PLAYER WINS";
+    } else if (player.health < enemy.health) {
+        document.querySelector("#display-text").innerHTML = "ENEMY WINS";
+    }
+}
+//decrease timer countdown
+let timer = 60; 
+let timerId;  
+function decreaseTimer() {
+    if (timer > 0) {
+        timerId = setTimeout(decreaseTimer, 1000);
+        timer--; 
+        document.querySelector("#timer").innerHTML = timer; 
+    }
+
+    if (timer === 0) {        
+        determineWinner({player, enemy, timerId});
+    }
+}
+decreaseTimer(); 
+
 // animate the game
 function animate() {
     window.requestAnimationFrame(animate); 
@@ -190,6 +219,10 @@ function animate() {
     ) {
         player.isAttacking = false; 
         console.log("player attack hit"); 
+
+        //damage enemy health change healthbar
+        enemy.health -= 20; 
+        document.querySelector("#enemy-health").style.width = enemy.health + "%"; 
     }
 
     //ENEMY attackBox collision
@@ -199,6 +232,15 @@ function animate() {
     ) {
         enemy.isAttacking = false; 
         console.log("enemy attack hit"); 
+
+         //damage player health change healthbar
+         player.health -= 20; 
+         document.querySelector("#player-health").style.width = player.health + "%"; 
+    }
+
+    //END game based on health 
+    if (enemy.health <= 0 || player.health <= 0) {
+        determineWinner({ player, enemy, timerId }); 
     }
 }
 

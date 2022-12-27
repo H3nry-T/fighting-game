@@ -1,18 +1,58 @@
+<head>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+  </style>
+</head>
 <body>
-    <!-- container div -->
-    <div class="container" style="position: relative;">
-        <!-- smaller red div -->
-        <div style="position: absolute; display: flex">
-            <!-- player health -->
-            <div style="background-color: yellow; height: 30px; width: 100px"></div>
-            <!-- timer -->
-            <div style="background-color: red; width: 100px; height: 100px;"></div>
-            <!-- enemy health -->
-            <div style="background-color: yellow; height: 30px; width: 100px"></div>
-        </div>
-        <canvas></canvas>
+  <!-- container div -->
+  <div style="position: relative; display: inline-block">
+    <!-- smaller red div -->
+    <div
+      style="
+        position: absolute;
+        display: flex;
+        width: 100%;
+        align-items: center;
+        padding: 20px;
+      "
+    >
+      <!-- player health -->
+      <div style="position: relative; height: 30px; width: 100%; display: flex; justify-content: flex-end">
+        <div style="background-color: yellow; height: 30px; width: 100%; "></div>
+        <div id="player-health" style="position: absolute; background: blue; top: 0; right: 0; bottom: 0; width: 100%;"></div>
+      </div>
+      <!-- timer -->
+      <div
+        id="timer"
+        style="
+          background-color: red;
+          width: 100px;
+          height: 100px;
+          flex-shrink: 0;
+          display: flex; 
+          align-items: center; 
+          justify-content: center; 
+        "
+      >10</div>
+      <!-- enemy health -->
+      <div style="position: relative; height: 30px; width: 100%">
+        <div style="background-color: yellow; height: 30px; "></div>
+        <div id="enemy-health" style="position: absolute; background: blue; top: 0; right: 0; bottom: 0; left: 0;"></div>
+      </div>
+
     </div>
-    
-    <script src="index.js"></script>
-    
+    <div id="display-text" 
+        style="position: absolute; color: white;  align-items: center; justify-content: center; 
+        top: 0; 
+        right: 0; 
+        bottom: 0; 
+        left: 0; 
+        display: none; 
+    ">Tie</div>
+    <canvas></canvas>
+  </div>
+
+  <script src="index.js"></script>
 </body>
