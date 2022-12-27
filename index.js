@@ -201,6 +201,10 @@ function animate() {
     //draw shop
     shop.update();
 
+    //background opacity 
+    c.fillStyle = "rgba(255, 255, 255, 0.1)";
+    c.fillRect(0, 0, canvas.width, canvas.height); 
+    
     //update player's position affected by gravity; 
     player.update(); 
     enemy.update(); //======================================================== RENDER ENEMY
@@ -258,7 +262,9 @@ function animate() {
         
         //damage enemy health change healthbar
         enemy.takeHit(14);
+
         document.querySelector("#enemy-health").style.width = enemy.health + "%"; 
+        
     }
     //IF PLAYER misses 
     if (player.isAttacking && player.framesCurrent === 4) {

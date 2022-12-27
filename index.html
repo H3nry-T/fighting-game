@@ -1,7 +1,11 @@
 <head>
+  <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
+  
   <style>
     * {
       box-sizing: border-box;
+      font-family: "VT323", monospace;
+      font-size: 50px; 
     }
   </style>
 </head>
@@ -19,27 +23,38 @@
       "
     >
       <!-- player health -->
-      <div style="position: relative; height: 30px; width: 100%; display: flex; justify-content: flex-end">
-        <div style="background-color: yellow; height: 30px; width: 100%; "></div>
-        <div id="player-health" style="position: absolute; background: blue; top: 0; right: 0; bottom: 0; width: 100%;"></div>
+      <div style="position: relative; width: 100%; display: flex; justify-content: flex-end; 
+        border-top: 2px solid white;
+        border-left: 2px solid white;
+        border-bottom: 2px solid white;
+      ">
+        <div style="background-color: red; height: 30px; width: 100%; "></div>
+        <div id="player-health" style="position: absolute; background: #6366f1; top: 0; right: 0; bottom: 0; width: 100%;"></div>
       </div>
       <!-- timer -->
       <div
         id="timer"
         style="
-          background-color: red;
-          width: 100px;
-          height: 100px;
+          background-color: black;
+          color: white; 
+          width: 50px;
+          height: 50px;
           flex-shrink: 0;
           display: flex; 
           align-items: center; 
           justify-content: center; 
+          border: 2px solid white; 
         "
       >10</div>
       <!-- enemy health -->
-      <div style="position: relative; height: 30px; width: 100%">
-        <div style="background-color: yellow; height: 30px; "></div>
-        <div id="enemy-health" style="position: absolute; background: blue; top: 0; right: 0; bottom: 0; left: 0;"></div>
+      <div style="position: relative; width: 100%;
+      border-top: 2px solid white;
+      border-right: 2px solid white;
+      border-bottom: 2px solid white;
+
+      ">
+        <div style="background-color: red; height: 30px; "></div>
+        <div id="enemy-health" style="position: absolute; background: #6366f1; top: 0; right: 0; bottom: 0; left: 0;"></div>
       </div>
 
     </div>
@@ -54,6 +69,7 @@
     <canvas></canvas>
   </div>
 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/gsap.min.js" integrity="sha512-f8mwTB+Bs8a5c46DEm7HQLcJuHMBaH/UFlcgyetMqqkvTcYg4g5VXsYR71b3qC82lZytjNYvBj2pf0VekA9/FQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
   <script src="js/utils.js"></script>
   <script src="js/classes.js"></script>
   <script src="index.js"></script>
