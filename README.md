@@ -18,6 +18,8 @@ This project is a simple fighting game that utilizes an HTML canvas and JavaScri
 
 - both player/enemy can dodge once and must attack and hit to gain the dodge ability back
 
+- sprites are animated on each animation frame. 
+
 ## game features:
 
 keybindings: 
