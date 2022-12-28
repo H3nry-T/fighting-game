@@ -191,7 +191,7 @@ decreaseTimer();
 
 // animate the game
 function animate() {
-    window.requestAnimationFrame(animate); 
+    // window.requestAnimationFrame(animate); 
 
     //redraw the fighting background as a black rectangle
     c.fillStyle = "black"; 
@@ -264,8 +264,9 @@ function animate() {
         && player.framesCurrent === 4
     ) {
         player.isAttacking = false; 
-        console.log("player attack hit"); 
-        
+        console.log("player attack hit, player can dodge"); 
+        player.canDodge = true;
+
         //damage enemy health change healthbar
         document.querySelector("#enemy-health").style.width = enemy.health + "%"; 
         enemy.takeHit(11);
@@ -285,7 +286,8 @@ function animate() {
         && enemy.framesCurrent === 2
     ) {
         enemy.isAttacking = false; 
-        console.log("enemy attack hit"); 
+        console.log("enemy attack hit, enemy can dodge"); 
+        enemy.canDodge = true;
 
          //damage player health change healthbar
          document.querySelector("#player-health").style.width = player.health + "%"; 
@@ -302,6 +304,8 @@ function animate() {
     if (enemy.health <= 0 || player.health <= 0) {
         determineWinner({ player, enemy, timerId }); 
     }
+
+    window.requestAnimationFrame(animate); 
 }
 
 animate(); 
@@ -320,13 +324,25 @@ window.addEventListener("keydown", (event) => {
     if (!player.dead) {
         switch (event.key) {
             //PLAYER controls
-            case "d": 
+            case "d":
+                if (Date.now() - player.lastKeyPressTime < 300 && Date.now() - player.lastKeyPressTime > 150) {
+                    //DODGE
+                    player.dodge(); 
+                    player.canDodge = false; 
+                } 
                 keys.d.pressed = true; 
                 player.lastKey = "d";
+                player.lastKeyPressTime = Date.now(); 
                 break;
             case "a": 
+                if (Date.now() - player.lastKeyPressTime < 300 && Date.now() - player.lastKeyPressTime > 150) {
+                    //DODGE
+                    player.dodge();
+                    player.canDodge = false; 
+                }
                 keys.a.pressed = true; 
-                player.lastKey = "a"; 
+                player.lastKey = "a";
+                player.lastKeyPressTime = Date.now(); 
                 break; 
             case "w": ///////////////////
                 player.jump(); 
@@ -341,12 +357,26 @@ window.addEventListener("keydown", (event) => {
         switch (event.key) {
             //ENEMY controls
             case "ArrowRight": 
+                if (Date.now() - enemy.lastKeyPressTime < 300 && Date.now() - enemy.lastKeyPressTime > 150) {
+                    //DODGE
+                    enemy.orientation = "RIGHT"; 
+                    enemy.dodge(); 
+                    enemy.canDodge = false; 
+                } 
                 keys.ArrowRight.pressed = true; 
                 enemy.lastKey = "ArrowRight";
+                enemy.lastKeyPressTime = Date.now(); 
                 break;
             case "ArrowLeft": 
+                if (Date.now() - enemy.lastKeyPressTime < 300 && Date.now() - enemy.lastKeyPressTime > 150) {
+                    //DODGE
+                    enemy.orientation = "LEFT"
+                    enemy.dodge(); 
+                    enemy.canDodge = false; 
+                } 
                 keys.ArrowLeft.pressed = true; 
                 enemy.lastKey = "ArrowLeft"; 
+                enemy.lastKeyPressTime = Date.now(); 
                 break; 
             case "ArrowUp": ///////////////////
                 enemy.jump(); 

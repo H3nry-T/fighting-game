@@ -36,7 +36,7 @@ class Sprite {
     animateFrames() {
         this.framesElapsed += 1; 
         
-        //every 10 frames
+        //every 5 frames
         if (this.framesElapsed % this.framesHold === 0) {
             //ANIMATE sprite "-1" stops the background from updating/flickering
             if (this.framesCurrent < this.framesMax - 1) {
@@ -84,6 +84,7 @@ class Fighter extends Sprite {
         this.width = 50; 
         
         this.lastKey; 
+        this.lastKeyPressTime;
         
         this.attackBox = {
             position: {
@@ -104,6 +105,7 @@ class Fighter extends Sprite {
         this.health = 100; 
         this.dead = false; 
         this.jumpCount = 0; 
+        this.canDodge = true; 
         this.orientation = orientation; //default orientation
 
         this.sprites = sprites; 
@@ -171,7 +173,7 @@ class Fighter extends Sprite {
         // //draw the attack box
         // c.fillRect(this.attackBox.position.x, this.attackBox.position.y, this.attackBox.width, this.attackBox.height); 
 
-        //update position depends on button press / gravity
+        //update position based on the velocity on every frame (depends on a button press or gravity)
         this.position.x += this.velocity.x; 
         this.position.y += this.velocity.y; 
 
@@ -204,10 +206,24 @@ class Fighter extends Sprite {
           this.velocity.y = -15;
           this.jumpCount += 1;
         } else {
-          console.log("Double jump used up");
+          console.log("Triple jump used up");
         }
     }
-      
+    
+    dodge() {
+        if (!this.canDodge) {
+            console.log("can't dodge"); 
+            return;
+        }
+        else if (this.orientation === "LEFT") {
+            this.velocity.x -= 200; 
+            console.log("player dodge left"); 
+        } else {
+            this.velocity.x += 200; 
+            console.log("player dodge right"); 
+        }
+    }
+
     attack() {
         this.switchSprite("attack1"); 
         this.isAttacking = true; 
