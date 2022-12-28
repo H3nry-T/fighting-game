@@ -29,3 +29,5 @@ the arena doesn't have a boundary, instead the player can go behind the other pl
 both players can double jump which adds more dynamic gameplay compared to being able to jump once. 
 
 I have also added some critical hits which will add some uncertainty into the game. especially samurai mack who has a slower katana, may be able to deal extremely high dps. `
+
+I plan on adding dodging into this game. timing the dodge correctly will make the character immune 
