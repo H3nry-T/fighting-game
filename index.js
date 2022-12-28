@@ -87,7 +87,8 @@ const player = new Fighter({
         },
         width: 155, 
         height: 50
-    }
+    }, 
+    orientation: "RIGHT"
 }); 
 
 player.draw(); 
@@ -95,8 +96,8 @@ player.draw();
 //create instance of ENEMY sprite
 const enemy = new Fighter({
     position: {
-        x: 400, 
-        y: 100
+        x: 960, 
+        y: 0
     },
     velocity: {
         x: 0, 
@@ -151,7 +152,8 @@ const enemy = new Fighter({
         },
         width: 165, 
         height: 50
-    }
+    }, 
+    orientation: "RIGHT"
 }); 
 
 enemy.draw(); 
@@ -218,9 +220,11 @@ function animate() {
     //left, right, idle
     if (keys.a.pressed && player.lastKey === "a") {
         player.velocity.x = -5; 
+        player.orientation = "LEFT"; 
         player.switchSprite("run"); 
     } else if (keys.d.pressed && player.lastKey === "d") {
         player.velocity.x = 5; 
+        player.orientation = "RIGHT"; 
         player.switchSprite("run"); 
     } else {
         //default image 
@@ -233,12 +237,14 @@ function animate() {
         player.switchSprite("fall"); 
     }
 
-    //animation responds to ENEMY controls 
+    //animation responds to ENEMY controls (THERE IS AN INVERSION ON X AXIS BUG AND I CANNOT SOLVE)
     if (keys.ArrowLeft.pressed && enemy.lastKey === "ArrowLeft") {
         enemy.velocity.x = -5; 
+        enemy.orientation = "RIGHT"; 
         enemy.switchSprite("run"); 
     } else if (keys.ArrowRight.pressed && enemy.lastKey === "ArrowRight") {
        enemy.velocity.x = 5; 
+       enemy.orientation = "LEFT"; 
        enemy.switchSprite("run"); 
     } else {
         //default image 
@@ -320,10 +326,10 @@ window.addEventListener("keydown", (event) => {
                 keys.a.pressed = true; 
                 player.lastKey = "a"; 
                 break; 
-            case "w": 
-                player.velocity.y = -15; 
+            case "w": ///////////////////
+                player.jump(); 
                 break; 
-            case " ": 
+            case "s": 
                 player.attack(); 
                 break;
         }
@@ -340,14 +346,24 @@ window.addEventListener("keydown", (event) => {
                 keys.ArrowLeft.pressed = true; 
                 enemy.lastKey = "ArrowLeft"; 
                 break; 
-            case "ArrowUp": 
-                enemy.velocity.y = -15; 
+            case "ArrowUp": ///////////////////
+                enemy.jump(); 
                 break;
             case "ArrowDown":
                 enemy.attack(); 
                 break;
         }
     }
+
+    if (player.dead || enemy.dead) {
+        switch(event.key) {
+            case "r": 
+                location.reload();
+                break;
+            default: 
+                break;   
+        }
+    }   
 });
 
 //button keyup

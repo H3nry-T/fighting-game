@@ -64,7 +64,8 @@ class Fighter extends Sprite {
         framesMax = 1, 
         offset = {x: 0, y: 0},
         sprites, 
-        attackBox = {offset: {}, width: undefined, height: undefined}
+        attackBox = {offset: {}, width: undefined, height: undefined},
+        orientation
     }) {
         super({
             position,
@@ -102,6 +103,8 @@ class Fighter extends Sprite {
         this.isAttacking;
         this.health = 100; 
         this.dead = false; 
+        this.jumpCount = 0; 
+        this.orientation = orientation; //default orientation
 
         this.sprites = sprites; 
         for (const sprite in this.sprites) {
@@ -110,6 +113,37 @@ class Fighter extends Sprite {
         }
     }
 
+    draw() { //modified draw() function to turn sprite left or right. 
+        c.save();
+        if (this.orientation === "LEFT") {
+          c.scale(-1, 1);
+          c.drawImage(
+            this.image,
+            this.framesCurrent * (this.image.width / this.framesMax),
+            0,
+            this.image.width / this.framesMax,
+            this.image.height,
+            -this.position.x - this.offset.x,
+            this.position.y - this.offset.y,
+            (this.image.width / this.framesMax) * this.scale,
+            this.image.height * this.scale
+          );
+        } else {
+          c.drawImage(
+            this.image,
+            this.framesCurrent * (this.image.width / this.framesMax),
+            0,
+            this.image.width / this.framesMax,
+            this.image.height,
+            this.position.x - this.offset.x,
+            this.position.y - this.offset.y,
+            (this.image.width / this.framesMax) * this.scale,
+            this.image.height * this.scale
+          );
+        }
+        c.restore();
+      }
+      
     //update sprite affected by gravity
     update() {
         this.draw(); 
@@ -117,10 +151,24 @@ class Fighter extends Sprite {
             this.animateFrames(); 
         }
 
-        //attackBox should follow around the player's position       offset means attack box on enemy will face the player
-        this.attackBox.position.x = this.position.x + this.attackBox.offset.x;
-        this.attackBox.position.y = this.position.y + this.attackBox.offset.y;  
-        //draw the attack box
+        // Update attackBox position based on orientation
+        this.attackBox.position.y = this.position.y + this.attackBox.offset.y;
+        if (this.orientation === "LEFT") {
+            this.attackBox.position.x = this.position.x - this.attackBox.offset.x - 130; // I seriously do not know why it is 130 pixels but it is the only solution I can find to this
+            c.fillStyle = this.color; 
+            
+        } else {
+            this.attackBox.position.x = this.position.x + this.attackBox.offset.x;
+            c.fillStyle = this.color; 
+        }
+        
+        // c.fillRect(this.attackBox.position.x, this.attackBox.position.y, this.attackBox.width, this.attackBox.height);
+        
+        //OLD ATTACK BOX CODE MIGHT NEED FOR THE FUTURE =========================================================================
+        // //attackBox should follow around the player's position       offset means attack box on enemy will face the player
+        // this.attackBox.position.x = this.position.x + this.attackBox.offset.x;
+        // this.attackBox.position.y = this.position.y + this.attackBox.offset.y;  
+        // //draw the attack box
         // c.fillRect(this.attackBox.position.x, this.attackBox.position.y, this.attackBox.width, this.attackBox.height); 
 
         //update position depends on button press / gravity
@@ -131,12 +179,35 @@ class Fighter extends Sprite {
         if (this.position.y + this.height + this.velocity.y >= canvas.height - 96) {
             this.velocity.y = 0; 
             this.position.y = 330;
+
+            this.jumpCount = 0; 
         } else {
             // update gravitational acceleration if in sprite in air
             this.velocity.y += gravity; 
         }
+
+        // stop going out of bounds 
+
+        if (this.position.x + this.width >= canvas.width + 100) {
+            this.velocity.x = 0; 
+            this.position.x = 0;
+        }
+        if (this.position.x < -90) {
+            this.velocity.x = 0; 
+            this.position.x = 1024; 
+        } 
+        
     }
 
+    jump() {
+        if (this.jumpCount < 2) {
+          this.velocity.y = -15;
+          this.jumpCount += 1;
+        } else {
+          console.log("Double jump used up");
+        }
+    }
+      
     attack() {
         this.switchSprite("attack1"); 
         this.isAttacking = true; 

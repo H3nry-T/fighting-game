@@ -22,3 +22,8 @@ Kenji does less damage compared to samurai mack but is quicker.
 
 Both characters are controllable for multiplayer. the kenji character is controlled through the arrow buttons and the samurai mack character is controllable through the wasd keys. This allows for local multiplayer which is alot more fun if you have friends around. However you are not able to play the game in single player. 
 
+Added rotation on the X axis so the players can face different directions and the hitboxes will rotate as well. 
+
+the arena doesn't have a boundary, instead the player can go behind the other player by going out of bounds.
+
+both players can double jump which adds more dynamic gameplay compared to being able to jump once. 
