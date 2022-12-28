@@ -200,7 +200,7 @@ class Fighter extends Sprite {
     }
 
     jump() {
-        if (this.jumpCount < 2) {
+        if (this.jumpCount < 3) {
           this.velocity.y = -15;
           this.jumpCount += 1;
         } else {
