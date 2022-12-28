@@ -267,9 +267,10 @@ function animate() {
         console.log("player attack hit"); 
         
         //damage enemy health change healthbar
-        enemy.takeHit(14);
-
         document.querySelector("#enemy-health").style.width = enemy.health + "%"; 
+        enemy.takeHit(11);
+        document.querySelector("#enemy-health").style.width = enemy.health + "%"; 
+
         
     }
     //IF PLAYER misses 
@@ -287,6 +288,7 @@ function animate() {
         console.log("enemy attack hit"); 
 
          //damage player health change healthbar
+         document.querySelector("#player-health").style.width = player.health + "%"; 
          player.takeHit(9); 
          document.querySelector("#player-health").style.width = player.health + "%"; 
     }

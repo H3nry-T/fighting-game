@@ -38,3 +38,12 @@ function decreaseTimer() {
         determineWinner({player, enemy, timerId});
     }
 }
+
+function randomAttackMultiplier(number) {
+    const min = 0.8;
+    const max = 1.5;
+    const increment = 0.1;
+
+    const randomNumber = min + Math.random() * (max - min) / increment * increment;
+    return randomNumber * number; 
+}

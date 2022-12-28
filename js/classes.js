@@ -214,7 +214,9 @@ class Fighter extends Sprite {
     }
 
     takeHit(attackDamage) {
-        this.health -= attackDamage; 
+        let randomAttackDamage = randomAttackMultiplier(attackDamage); 
+        this.health -= randomAttackDamage; 
+        console.log(randomAttackDamage); 
         if (this.health <= 0) {
             this.switchSprite("death"); 
         } else {
